@@ -147,7 +147,7 @@ const Dashboard: React.FC = () => {
 
   const updateLink = async (linkId: string, updateData: { linkName: string; actualLink: string }): Promise<void> => {
     try {
-      await axios.put('/api/updateLink', { linkId, ...updateData })
+      await axios.patch('/api/updateLink', { linkId, ...updateData })
       await fetchLinks()
     } catch (error) {
       throw new Error('Failed to update link')

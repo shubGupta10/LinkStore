@@ -122,19 +122,21 @@ const AddLink: React.FC<AddLinkProps> = ({ onSuccess }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700">
+        <Button className="bg-blue-600 hover:bg-blue-700 p-3 flex items-center justify-center">
           <LinkIcon className="mr-2 h-4 w-4" />
           Create Link
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md bg-black text-white">
+      <DialogContent className="sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full bg-black text-white p-6 rounded-lg 
+        sm:mt-10 md:mt-16 lg:mt-20 xl:mt-28 
+        sm:bottom-auto sm:top-0 md:top-1/4">
         <DialogHeader>
           <DialogTitle>Add New Link</DialogTitle>
           <DialogDescription>
             Fill in the details to create a new link.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleUpload} className="space-y-4 ">
+        <form onSubmit={handleUpload} className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="linkName">Link Name</Label>
@@ -143,7 +145,9 @@ const AddLink: React.FC<AddLinkProps> = ({ onSuccess }) => {
                 placeholder="Enter your link name"
                 value={linkName}
                 onChange={(e) => setLinkName(e.target.value)}
+                autoComplete='off'
                 required
+                className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-blue-600"
               />
             </div>
             <div className="space-y-2">
@@ -153,26 +157,28 @@ const AddLink: React.FC<AddLinkProps> = ({ onSuccess }) => {
                 placeholder="Enter your link URL"
                 value={actualLink}
                 onChange={(e) => setActualLink(e.target.value)}
+                autoComplete='off'
                 required
+                className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-blue-600"
               />
             </div>
           </div>
-
+  
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="p-4">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
           {success && (
-            <Alert>
+            <Alert className="p-4">
               <AlertDescription>Link added successfully!</AlertDescription>
             </Alert>
           )}
-
+  
           <DialogFooter className="sm:justify-start">
             <Button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="w-full bg-blue-600 hover:bg-blue-700 py-3 text-lg font-semibold rounded-md"
               disabled={isLoading}
             >
               {isLoading ? (
