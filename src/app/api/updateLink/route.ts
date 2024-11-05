@@ -16,7 +16,7 @@ const validateUpdateData = (data: any) => {
     return { isValid: true, linkId, updateData };
 };
 
-export async function UPDATE(request: NextRequest) {
+export async function PATCH(request: NextRequest) {
     try {
         await Connect();
 
