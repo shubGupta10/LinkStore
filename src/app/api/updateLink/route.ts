@@ -2,18 +2,18 @@ import { NextResponse, NextRequest } from "next/server";
 import LinkModel from "@/model/LinkModel";
 import Connect from "@/dbConfig/Connect";
 
-const validateUpdateData = (data: any) => {
-    const { linkId, ...updateData } = data;
-    
+const validatePatchData = (data: any) => {
+    const { linkId, ...patchData } = data;
+
     if (!linkId) {
         return { isValid: false, error: "Link ID is required" };
     }
-    
-    if (Object.keys(updateData).length === 0) {
+
+    if (Object.keys(patchData).length === 0) {
         return { isValid: false, error: "No update data provided" };
     }
-    
-    return { isValid: true, linkId, updateData };
+
+    return { isValid: true, linkId, patchData };
 };
 
 export async function PATCH(request: NextRequest) {
@@ -21,8 +21,8 @@ export async function PATCH(request: NextRequest) {
         await Connect();
 
         const data = await request.json();
-        
-        const validation = validateUpdateData(data);
+
+        const validation = validatePatchData(data);
         if (!validation.isValid) {
             return NextResponse.json(
                 { error: validation.error },
@@ -30,11 +30,12 @@ export async function PATCH(request: NextRequest) {
             );
         }
 
-        const { linkId, updateData } = validation;
+        const { linkId, patchData } = validation;
 
+        // Use findByIdAndUpdate for PATCH request to apply partial updates
         const response = await LinkModel.findByIdAndUpdate(
             linkId,
-            { $set: updateData },
+            { $set: patchData }, // Only update the fields provided in the request
             { new: true, runValidators: true }
         );
 
@@ -46,19 +47,19 @@ export async function PATCH(request: NextRequest) {
         }
 
         return NextResponse.json(
-            { message: "Link updated successfully", data: response },
+            { message: "Link patched successfully", data: response },
             { status: 200 }
         );
     } catch (error: any) {
-        console.error("Error updating link:", error);
-        
+        console.error("Error patching link:", error);
+
         if (error.name === "ValidationError") {
             return NextResponse.json(
                 { error: "Invalid data provided", details: error.errors },
                 { status: 400 }
             );
         }
-        
+
         if (error.name === "CastError") {
             return NextResponse.json(
                 { error: "Invalid link ID format" },
@@ -71,8 +72,4 @@ export async function PATCH(request: NextRequest) {
             { status: 500 }
         );
     }
-}
-
-export async function PATCH(request: NextRequest) {
-    return UPDATE(request);
 }
