@@ -52,7 +52,7 @@ const login = () => {
       setUserData(user)
       const accessToken = await user.getIdToken();
       setToken(accessToken)
-      router.push('/pages/Dashboard')
+      router.push(`/pages/Dashboard/${user.uid}`)
     } catch (error) {
       setError('Failed to create user. Please try again.')
       console.error("Failed to create User", error)

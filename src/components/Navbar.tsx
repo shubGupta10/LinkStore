@@ -14,6 +14,7 @@ interface NavItem {
   name: string;
   href: string;
   icon: React.ReactNode;
+  requiresAuth?: boolean;
 }
 
 const Navbar: React.FC = () => {
@@ -45,10 +46,26 @@ const Navbar: React.FC = () => {
     setIsOpen(prev => !prev);
   };
 
+  // Define nav items with authentication requirement
   const navItems: NavItem[] = [
-    { name: 'Home', href: '/', icon: <Home className="w-4 h-4 mr-2" /> },
-    { name: 'Dashboard', href: '/pages/Dashboard', icon: <LayoutDashboard className="w-4 h-4 mr-2" /> }
+    { 
+      name: 'Home', 
+      href: '/', 
+      icon: <Home className="w-4 h-4 mr-2" />,
+      requiresAuth: false 
+    },
+    { 
+      name: 'Dashboard', 
+      href: userData?.uid ? `/pages/Dashboard/${userData.uid}` : '/', 
+      icon: <LayoutDashboard className="w-4 h-4 mr-2" />,
+      requiresAuth: true 
+    }
   ];
+
+  // Filter nav items based on authentication status
+  const filteredNavItems = navItems.filter(item => 
+    !item.requiresAuth || (item.requiresAuth && token && userData)
+  );
 
   const handleTakemetoSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -82,7 +99,7 @@ const Navbar: React.FC = () => {
   };
 
   if (isLoading) {
-    return null; // Optionally show a loading spinner or placeholder here
+    return null;
   }
 
   return (
@@ -99,7 +116,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           <div className="hidden md:flex space-x-6 items-center">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -149,7 +166,7 @@ const Navbar: React.FC = () => {
             className="md:hidden bg-black/90 backdrop-blur-md"
           >
             <div className="flex flex-col space-y-4 p-4">
-              {navItems.map((item) => (
+              {filteredNavItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
@@ -167,7 +184,6 @@ const Navbar: React.FC = () => {
                 >
                   Log Out
                 </Button>
-
               ) : (
                 <Button
                   variant="outline"
@@ -177,7 +193,6 @@ const Navbar: React.FC = () => {
                   Sign In
                 </Button>
               )}
-
             </div>
           </motion.div>
         )}
