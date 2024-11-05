@@ -3,13 +3,14 @@ import { getAuth } from 'firebase/auth';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCdZEbphIc1k8mwGb5wYNcmPdcPjKOqCCw",
-  authDomain: "pingbackend.firebaseapp.com",
-  projectId: "pingbackend",
-  storageBucket: "pingbackend.appspot.com",
-  messagingSenderId: "906029839091",
-  appId: "1:906029839091:web:e12b57b80a7b54ae8b3d86"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
+
 
 export const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth(firebaseApp);
